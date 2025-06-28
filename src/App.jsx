@@ -12,7 +12,16 @@ export default function YoutubeDownloader() {
 
     const fetchFormats = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/api/formats`, { url });
+            const response = await axios.post(
+                `${BASE_URL}/api/formats`,
+                { url },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
             const resList = response.data.resolutions.map(res => ({
                 label: res.label,
                 value: res.value,
@@ -37,11 +46,23 @@ export default function YoutubeDownloader() {
         setError('');
 
         try {
-            const response = await axios.post(`${BASE_URL}/api/download`, {
-                url,
-                resolution: selectedFormat,
-                mode: selectedFormat === 'audio' || selectedFormat === 'best' ? selectedFormat : 'video'
-            }, { responseType: 'blob' });
+            const response = await axios.post(
+                `${BASE_URL}/api/download`,
+                {
+                    url,
+                    resolution: selectedFormat,
+                    mode:
+                        selectedFormat === 'audio' || selectedFormat === 'best'
+                            ? selectedFormat
+                            : 'video',
+                },
+                {
+                    responseType: 'blob',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
             const contentDisposition = response.headers['content-disposition'];
             const filenameMatch = contentDisposition?.match(/filename="(.+)"/);
