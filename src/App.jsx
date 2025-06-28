@@ -8,7 +8,7 @@ export default function YoutubeDownloader() {
     const [downloading, setDownloading] = useState(false);
     const [error, setError] = useState('');
 
-    const BASE_URL = 'http://localhost:5000';
+    const BASE_URL = import.meta.env.VITE_API_URL;
 
     const fetchFormats = async () => {
         try {
